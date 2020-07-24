@@ -1,0 +1,13 @@
+{
+  "name": "express-torus-react-native",
+  "displayName": "express-torus-react-native",
+  "expo": {
+    "scheme": "myapp",
+    "name": "express-torus-react-native",
+    "slug": "express-torus-react-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
