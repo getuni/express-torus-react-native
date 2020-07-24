@@ -56,7 +56,7 @@ export default () => {
   return (
     <View>
       {(!!error) && <Text children={error.toString()} />}
-      {(!!results) && (
+      {(!!result) && (
         <>
           {/* social attributes */}
           <Image source={{ uri: result.userInfo.profileImage}} />

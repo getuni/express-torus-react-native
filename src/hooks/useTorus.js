@@ -1,6 +1,6 @@
 import React, {useCallback, useState, useEffect} from "react";
 import parse from "url-parse";
-import {Linking} from "react-native";
+import {Linking, Platform} from "react-native";
 import {useImmer} from "use-immer";
 import {parse as params} from "query-string";
 
@@ -16,7 +16,7 @@ const useTorus = ({} = defaultOptions) => {
     result: null,
   });
   const login = useCallback(
-    provider => Linking.openURL(`${providerUrl}/torus/${provider}`),
+    provider => Linking.openURL(`${providerUrl}/torus/${provider}?platform=${Platform.OS}`),
     [providerUrl],
   );
   const logout = useCallback(
