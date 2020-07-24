@@ -2,7 +2,7 @@
   "name": "express-torus-react-native",
   "version": "0.0.1-alpha.1",
   "description": "🔐 ⚛️ A React Native hook for simple decentralized key management using Tor.us, which serves as a combined social login and ethereum wallet!",
-  "main": "dist",
+  "main": "dist/index.js",
   "repository": "https://github.com/cawfree/express-torus-react-native",
   "author": "Alex Thomas (@cawfree) <hello@cawfree.com>",
   "license": "MIT",

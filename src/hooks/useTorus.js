@@ -8,7 +8,7 @@ const defaultOptions = {
   providerUrl: 'http://localhost:3000',
 };
 
-export default useTorus = ({} = defaultOptions) => {
+const useTorus = ({} = defaultOptions) => {
   const {providerUrl} = defaultOptions;
   const [state, updateState] = useImmer({
     loading: false,
@@ -72,3 +72,5 @@ export default useTorus = ({} = defaultOptions) => {
   const {loading, result, error} = state;
   return [{login, logout}, loading, result, error];
 };
+
+export default useTorus;

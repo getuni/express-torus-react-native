@@ -3164,6 +3164,14 @@ expo@~38.0.1:
     unimodules-task-manager-interface "~5.2.1"
     uuid "^3.4.0"
 
+express-torus-react-native@../:
+  version "0.0.1-alpha.1"
+  dependencies:
+    immer "^7.0.5"
+    query-string "^6.13.1"
+    url-parse "^1.4.7"
+    use-immer "^0.4.1"
+
 extend-shallow@^1.1.2:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/extend-shallow/-/extend-shallow-1.1.4.tgz#19d6bf94dfc09d76ba711f39b872d21ff4dd9071"
