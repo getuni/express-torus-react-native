@@ -3,8 +3,6 @@ import { Image, StyleSheet, TouchableOpacity, Text, View, ActivityIndicator } fr
 
 import {useTorus} from "express-torus-react-native";
 
-import useTorus from "./useTorus";
-
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
