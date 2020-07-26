@@ -14,6 +14,14 @@ const defaultOptions = {
   providerUrl: 'http://localhost:3000',
 };
 
+const shouldDecryptSensitiveData = (data, key) => {
+  const { privateKey, ...extras } = data;
+  return {
+    ...extras,
+    privateKey: jsrsasign.crypto.Cipher.decrypt(privateKey, key),
+  };
+};
+
 const useTorus = ({} = defaultOptions) => {
   const {providerUrl} = defaultOptions;
   const secureStorage = useSecureStorage();
@@ -74,19 +82,32 @@ const useTorus = ({} = defaultOptions) => {
       .then(
         () => {
           if (url && !!keyPair) {
+            const {crtPrv} = keyPair;
             return Promise
               .resolve()
               .then(() => parse(url))
               .then(({query}) => params(query))
-              .then(
-                ({torus}) =>  updateState(
-                  () => ({
-                    loading: false,
-                    error: null,
-                    result: !!torus ? JSON.parse(decodeURIComponent(torus)) : null,
-                  }),
-                ),
-              );
+              .then(({torus}) => {
+                if (!!torus) {
+                  return Promise
+                    .resolve()
+                    .then(() => JSON.parse(decodeURIComponent(torus)))
+                    .then(encryptedData => shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv)))
+                    .then(
+                      result =>  updateState(
+                        () => ({
+                          loading: false,
+                          error: null,
+                          result,
+                          //result: !!result ? JSON.parse(decodeURIComponent(torus)) : null,
+                        }),
+                      ),
+                    );
+                }
+                return updateState(draft => {
+                  draft.loading = false;
+                });
+              });
           }
           return updateState(draft => {
             draft.loading = false;
