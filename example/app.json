@@ -2,6 +2,7 @@
   "name": "express-torus-react-native",
   "displayName": "express-torus-react-native",
   "expo": {
+    "sdkVersion": "38.0.0",
     "scheme": "myapp",
     "name": "express-torus-react-native",
     "slug": "express-torus-react-native",

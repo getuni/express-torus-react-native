@@ -66,7 +66,7 @@ const useTorus = ({} = defaultOptions) => {
         },
       )
       // TODO: should sign this data with a checksum to define validity
-      .then(publicCertificate => Linking.openURL(`${providerUrl}/torus/${provider}?platform=${Platform.OS}&public=${btoa(publicCertificate)}`)),
+      .then(publicCertificate => Linking.openURL(`${providerUrl}/torus?platform=${Platform.OS}&public=${btoa(publicCertificate)}`)),
     [providerUrl, keyPair],
   );
   const logout = useCallback(
