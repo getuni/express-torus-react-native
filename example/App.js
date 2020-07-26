@@ -1,7 +1,7 @@
 import React from "react";
 import {View, ActivityIndicator, StyleSheet, Text} from "react-native";
 
-import {useTorus, Torus, TorusProvider} from "./tmp";
+import {useTorus, Torus, TorusProvider} from "express-torus-react-native";
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: "lightgrey"},
