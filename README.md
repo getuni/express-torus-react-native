@@ -5,7 +5,7 @@ This is a companion library for [`express-torus`](https://github.com/cawfree/exp
 
 You can view the full (exhaustive!) list of supported authentication providers [**here**](https://github.com/torusresearch/torus-direct-web-sdk/blob/9d024825ce1fad8cb31e7878ad6b85ba6d6025b4/examples/vue-app/src/App.vue#L24).
 
-## Getting Started
+## 🚀 Getting Started
 
 Using [`yarn`](https://yarnpkg.com):
 
@@ -13,7 +13,7 @@ Using [`yarn`](https://yarnpkg.com):
 yarn add express-torus-react-native
 ```
 
-## iOS
+### iOS
 To support deep linking results from the webpage to your app, please append the following to your `AppDelegate.m`:
 
 ```objc
@@ -32,44 +32,67 @@ options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 
 Finally, you'll need to register your app's deep link scheme (i.e. `myapp`) as a [**URL Type**](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) with a role of **Viewer** in your App's `Info.plist`.
 
-## Usage
+## ✍️ Usage
 
 ```javascript
 import React from "react";
-import {View, Text, Image, TouchableOpacity} from "react-native";
-import {useTorus} from "express-torus-react-native";
+import {View, ActivityIndicator, StyleSheet, Text} from "react-native";
 
-export default () => {
-  const [{login, logout}, loading, result, error] = useTorus({
-    // XXX: Expects an express tor.us middleware to be listening at the following address:
-    providerUrl: "https://localhost:3000",
-  });
-  if (!loading && !result) {
-    // Twitter isn't the only supported login provider!
+import {useTorus, Torus, TorusProvider} from "express-torus-react-native";
+
+const styles = StyleSheet.create({
+  container: {flex: 1, backgroundColor: "lightgrey"},
+  error: { color: "red" },
+});
+
+const SimpleTorusLogin = ({...extraProps}) => {
+  const {loading, error, result} = useTorus();
+  if (loading) {
     return (
-      <TouchableOpacity
-        onPress={() => login("twitter")}
-        children="Log in."
+      <ActivityIndicator />
+    );
+  } else if (error) {
+    return (
+      <Text
+        style={styles.error}
+        children={error.toString()}
       />
     );
+  } else if (result) {
+    return (
+      <>
+        {/* social attributes */}
+        <Image source={{ uri: result.userInfo.profileImage}} />
+        <Text children={`Hi ${result.userInfo.name}`} />
+        {/* ethereum wallet attributes  */}
+        <Text children={`Ethereum Wallet Address: ${result.publicAddress}`} />
+        <Text children={`Ethereum Private Key: ${result.privateKey}`} />
+      </>
+    );
   }
+  // XXX: Serve the login. Available <SocialButtons /> on the login screen
+  //      are driven by the server config.
   return (
-    <View>
-      {(!!error) && <Text children={error.toString()} />}
-      {(!!result) && (
-        <>
-          {/* social attributes */}
-          <Image source={{ uri: result.userInfo.profileImage}} />
-          <Text children={`Hi ${result.userInfo.name}`} />
-          {/* ethereum wallet attributes  */}
-          <Text children={`Ethereum Wallet Address: ${result.publicAddress}`} />
-          <Text children={`Ethereum Private Key: ${result.privateKey}`} />
-        </>
-      )}
-    </View>
+    <Torus
+      style={{
+        flex: 1,
+      }}
+    />
   );
 };
+
+export default function App() {
+  return (
+    <TorusProvider
+      providerUri="http://localhost:3000"
+    >
+      <View style={styles.container}>
+        <SimpleTorusLogin />
+      </View>
+    </TorusProvider>
+  );
+}
 ```
 
-## License
+## ✌️ License
 [**MIT**](./LICENSE)
