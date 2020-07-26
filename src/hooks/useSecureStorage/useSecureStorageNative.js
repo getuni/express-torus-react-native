@@ -1,4 +1,4 @@
-import {useImmer} from "use-immer";
+import {useState} from "react";
 
 // XXX: On native platforms, it's acceptable to use in-memory storage since these platforms aren't subject to the same
 //      loss of runtime context that web navigation can cause.
