@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import * as WebBrowser from "expo-web-browser";
 import PropTypes from "prop-types";
 import {typeCheck} from "type-check";
 import {StyleSheet, Platform} from "react-native";
@@ -13,18 +14,28 @@ const styles = StyleSheet.create({
 });
 
 const Torus = ({style, ...extraProps}) => {
-  const {keyPair, providerUri} = useTorus();
-  if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
-    const {crtPub} = keyPair;
-    const uri = `${providerUri}/torus?platform=${Platform.OS}&public=${btoa(crtPub)}`;
-    return (
-      <WebView
-        {...extraProps}
-        style={[styles.transparent, StyleSheet.flatten(style)]}
-        source={{uri}}
-      />
-    );
-  }
+  //const {keyPair, providerUri} = useTorus();
+//  if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
+//    const {crtPub} = keyPair;
+//    const uri = `${providerUri}/torus?platform=${Platform.OS}&public=${btoa(crtPub)}`;
+//    return (
+//      <WebView
+//        {...extraProps}
+//        style={[styles.transparent, StyleSheet.flatten(style)]}
+//        source={{uri}}
+//      />
+//    );
+//  }
+  //useEffect(
+  //  () => {
+  //    if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
+  //      const {crtPub} = keyPair;
+  //      const uri = `${providerUri}/torus?platform=${Platform.OS}&public=${btoa(crtPub)}`;
+  //      WebBrowser.openBrowserAsync(uri);
+  //    }
+  //  },
+  //  [keyPair, providerUri],
+  //);
   return null;
 };
 

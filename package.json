@@ -33,6 +33,7 @@
     "use-immer": "^0.4.1"
   },
   "peerDependencies": {
+    "expo-web-browser": "^8.3.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-native": "^0.63.2",

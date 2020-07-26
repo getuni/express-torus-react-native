@@ -36,7 +36,7 @@ Finally, you'll need to register your app's deep link scheme (i.e. `myapp`) as a
 
 ```javascript
 import React from "react";
-import {View, ActivityIndicator, StyleSheet, Text} from "react-native";
+import {SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet, Text} from "react-native";
 
 import {useTorus, Torus, TorusProvider} from "express-torus-react-native";
 
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 });
 
 const SimpleTorusLogin = ({...extraProps}) => {
-  const {loading, error, result} = useTorus();
+  const {loading, error, result, login} = useTorus();
   if (loading) {
     return (
       <ActivityIndicator />
@@ -60,35 +60,28 @@ const SimpleTorusLogin = ({...extraProps}) => {
     );
   } else if (result) {
     return (
-      <>
-        {/* social attributes */}
-        <Image source={{ uri: result.userInfo.profileImage}} />
-        <Text children={`Hi ${result.userInfo.name}`} />
-        {/* ethereum wallet attributes  */}
-        <Text children={`Ethereum Wallet Address: ${result.publicAddress}`} />
-        <Text children={`Ethereum Private Key: ${result.privateKey}`} />
-      </>
+      <Text
+        children={JSON.stringify(result)}
+      />
     );
   }
-  // XXX: Serve the login. Available <SocialButtons /> on the login screen
-  //      are driven by the server config.
   return (
-    <Torus
-      style={{
-        flex: 1,
-      }}
-    />
+    <TouchableOpacity
+      onPress={login}
+    >
+      <Text
+        children="Login"
+      />
+    </TouchableOpacity>
   );
 };
 
 export default function App() {
   return (
-    <TorusProvider
-      providerUri="http://localhost:3000"
-    >
-      <View style={styles.container}>
+    <TorusProvider>
+      <SafeAreaView>
         <SimpleTorusLogin />
-      </View>
+      </SafeAreaView>
     </TorusProvider>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import {View, ActivityIndicator, StyleSheet, Text} from "react-native";
+import {SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet, Text} from "react-native";
 
 import {useTorus, Torus, TorusProvider} from "express-torus-react-native";
 
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
 });
 
 const SimpleTorusLogin = ({...extraProps}) => {
-  const {loading, error, result} = useTorus();
+  const {loading, error, result, login} = useTorus();
   if (loading) {
     return (
       <ActivityIndicator />
@@ -29,20 +29,22 @@ const SimpleTorusLogin = ({...extraProps}) => {
     );
   }
   return (
-    <Torus
-      style={{
-        flex: 1,
-      }}
-    />
+    <TouchableOpacity
+      onPress={login}
+    >
+      <Text
+        children="Login"
+      />
+    </TouchableOpacity>
   );
 };
 
 export default function App() {
   return (
     <TorusProvider>
-      <View style={styles.container}>
+      <SafeAreaView>
         <SimpleTorusLogin />
-      </View>
+      </SafeAreaView>
     </TorusProvider>
   );
 }

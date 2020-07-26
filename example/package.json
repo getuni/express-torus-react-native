@@ -12,6 +12,7 @@
     "expo-splash-screen": "~0.4.0",
     "expo-status-bar": "^1.0.0",
     "expo-updates": "~0.2.10",
+    "expo-web-browser": "~8.3.1",
     "express-torus-react-native": "../",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",

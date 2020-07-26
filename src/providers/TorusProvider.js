@@ -1,10 +1,13 @@
 import React, {useState, useEffect, useCallback} from "react";
 import PropTypes from "prop-types";
-import {Linking} from "react-native";
+import {Linking, Platform} from "react-native";
 import {parse as params} from "query-string";
 import jsrsasign from "jsrsasign";
 import parse from "url-parse";
 import {useImmer} from "use-immer";
+import {encode as btoa} from "base-64";
+import {typeCheck} from "type-check";
+import * as WebBrowser from "expo-web-browser";
 
 import {TorusContext} from "../contexts";
 import {useKeyPair} from "../hooks";
@@ -35,6 +38,10 @@ const TorusProvider = ({providerUri, children, ...extras}) => {
               .then(({query}) => params(query))
               .then(({torus}) => {
                 if (!!torus) {
+                  /* close prompt */
+                  if (Platform.OS === "ios") {
+                    WebBrowser.dismissBrowser();
+                  }
                   return Promise
                     .resolve()
                     .then(() => JSON.parse(decodeURIComponent(torus)))
@@ -55,6 +62,20 @@ const TorusProvider = ({providerUri, children, ...extras}) => {
       )
       .catch(error => updateState(() => ({ data: null, error }))),
     [updateState, keyPair],
+  );
+
+  const login = useCallback(
+    () => {
+      if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
+        const {crtPub} = keyPair;
+        const uri = `${providerUri}/torus?platform=${Platform.OS}&public=${btoa(crtPub)}`;
+        if (Platform.OS === "web") {
+          return Linking.openURL(uri);
+        }
+        return WebBrowser.openBrowserAsync(uri);
+      }
+    },
+    [providerUri, keyPair],
   );
 
   useEffect(
@@ -79,6 +100,7 @@ const TorusProvider = ({providerUri, children, ...extras}) => {
         ...state,
         providerUri,
         keyPair,
+        login,
       }}
     >
       {children}
