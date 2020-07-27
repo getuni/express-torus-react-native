@@ -1,3 +1,2 @@
 export {useTorus, useKeyPair} from "./hooks";
-export {TorusProvider} from "./providers";
-export {Torus} from "./components";
+export {TorusProvider as default} from "./providers";

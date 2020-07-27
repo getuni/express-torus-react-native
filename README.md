@@ -51,7 +51,7 @@ Finally, append the following lines in the iOS [`AppDelegate.m`](./example/ios/A
 import React from "react";
 import {SafeAreaView, TouchableOpacity, ActivityIndicator, Text} from "react-native";
 
-import {useTorus, TorusProvider} from "express-torus-react-native";
+import Torus, {useTorus} from "express-torus-react-native";
 
 const SimpleTorusLogin = ({...extraProps}) => {
   const {loading, error, result, login} = useTorus();
@@ -77,11 +77,11 @@ const SimpleTorusLogin = ({...extraProps}) => {
 
 export default function App() {
   return (
-    <TorusProvider providerUri="http://localhost:3000">
+    <Torus providerUri="http://localhost:3000">
       <SafeAreaView>
         <SimpleTorusLogin />
       </SafeAreaView>
-    </TorusProvider>
+    </Torus>
   );
 }
 ```
