@@ -12,6 +12,16 @@
     "prettify": "yarn prettier --write \"**/*.js\"",
     "test": "jest"
   },
+  "keywords": [
+    "react",
+    "react-native",
+    "express",
+    "web3",
+    "torus",
+    "authentication",
+    "ethereum",
+    "wallet"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/node": "^7.10.5",

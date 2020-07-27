@@ -5,6 +5,8 @@ This is a companion library for [`express-torus`](https://github.com/cawfree/exp
 
 You can view the full (exhaustive!) list of supported authentication providers [**here**](https://github.com/torusresearch/torus-direct-web-sdk/blob/9d024825ce1fad8cb31e7878ad6b85ba6d6025b4/examples/vue-app/src/App.vue#L24).
 
+This project works by navigating from your application to the interface hosted by your specified `providerUri`, i.e. where your instance of [`torus-express`](https://github.com/cawfree/express-torus) is being served. Upon successful auth, your app will returned to via [**Deep Linking**](https://reactnavigation.org/docs/deep-linking) and securely provide the authentication result. This includes standard authentication data (such as username and profile photo) in addition to [**Ethereum**](https://ethereum.org/en/) wallet credentials that can be used in transactions.
+
 ## 🚀 Getting Started
 
 Using [`yarn`](https://yarnpkg.com):
@@ -17,9 +19,7 @@ yarn add express-torus-react-native
 To support deep linking results from the webpage to your app, please append the following to your `AppDelegate.m`:
 
 ```objc
-- (BOOL)application:(UIApplication *)application
-openURL:(NSURL *)url
-options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
   if ([RCTLinkingManager application:application
                              openURL:url
                    sourceApplication:nil
@@ -36,14 +36,9 @@ Finally, you'll need to register your app's deep link scheme (i.e. `myapp`) as a
 
 ```javascript
 import React from "react";
-import {SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet, Text} from "react-native";
+import {SafeAreaView, TouchableOpacity, ActivityIndicator, Text} from "react-native";
 
-import {useTorus, Torus, TorusProvider} from "express-torus-react-native";
-
-const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: "lightgrey"},
-  error: { color: "red" },
-});
+import {useTorus, TorusProvider} from "express-torus-react-native";
 
 const SimpleTorusLogin = ({...extraProps}) => {
   const {loading, error, result, login} = useTorus();
@@ -53,32 +48,23 @@ const SimpleTorusLogin = ({...extraProps}) => {
     );
   } else if (error) {
     return (
-      <Text
-        style={styles.error}
-        children={error.toString()}
-      />
+      <Text style={styles.error} children={error.toString()} />
     );
   } else if (result) {
     return (
-      <Text
-        children={JSON.stringify(result)}
-      />
+      <Text children={JSON.stringify(result)} />
     );
   }
   return (
-    <TouchableOpacity
-      onPress={login}
-    >
-      <Text
-        children="Login"
-      />
+    <TouchableOpacity onPress={login}>
+      <Text children="Login" />
     </TouchableOpacity>
   );
 };
 
 export default function App() {
   return (
-    <TorusProvider>
+    <TorusProvider providerUri="http://localhost:3000">
       <SafeAreaView>
         <SimpleTorusLogin />
       </SafeAreaView>
