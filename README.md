@@ -4,6 +4,8 @@ This library enables cross-platform (Android/iOS/Web/Expo) ethereum-login for [*
 
 It works by navigating from your application to the interface hosted by your specified `providerUri`, i.e. where your instance of [`express-torus`](https://github.com/cawfree/express-torus) is being served. Upon successful auth with one of the many [**supported authentication providers**](https://github.com/torusresearch/torus-direct-web-sdk/blob/9d024825ce1fad8cb31e7878ad6b85ba6d6025b4/examples/vue-app/src/App.vue#L24), your app will returned to using [**Deep Linking**](https://reactnavigation.org/docs/deep-linking) with the authentication result, which is accessed via a [**hook**](https://reactjs.org/docs/hooks-intro.html). This includes standard authentication data (such as username and profile photo) in addition to [**Ethereum**](https://ethereum.org/en/) wallet credentials that can be used in transactions.
 
+This project was created as part of the [**Gitcoin**](https://gitcoin.co/) [**KERNEL Genesis Block**](https://gitcoin.co/blog/announcing-kernel/).
+
 ## 🚀 Getting Started
 
 Using [`npm`](https://npmjs.com):
