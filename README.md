@@ -3,9 +3,7 @@
 
 This is a companion library for [`express-torus`](https://github.com/cawfree/express-torus).
 
-You can view the full (exhaustive!) list of supported authentication providers [**here**](https://github.com/torusresearch/torus-direct-web-sdk/blob/9d024825ce1fad8cb31e7878ad6b85ba6d6025b4/examples/vue-app/src/App.vue#L24).
-
-This project works by navigating from your application to the interface hosted by your specified `providerUri`, i.e. where your instance of [`torus-express`](https://github.com/cawfree/express-torus) is being served. Upon successful auth, your app will returned to via [**Deep Linking**](https://reactnavigation.org/docs/deep-linking) and securely provide the authentication result. This includes standard authentication data (such as username and profile photo) in addition to [**Ethereum**](https://ethereum.org/en/) wallet credentials that can be used in transactions.
+This project works by navigating from your application to the interface hosted by your specified `providerUri`, i.e. where your instance of [`express-torus`](https://github.com/cawfree/express-torus) is being served. Upon successful auth, your app will returned to via [**Deep Linking**](https://reactnavigation.org/docs/deep-linking) and securely provide the authentication result. This includes standard authentication data (such as username and profile photo) in addition to [**Ethereum**](https://ethereum.org/en/) wallet credentials that can be used in transactions.
 
 ## 🚀 Getting Started
 
@@ -72,6 +70,8 @@ export default function App() {
   );
 }
 ```
+
+You can view the full list of supported authentication providers [**here**](https://github.com/torusresearch/torus-direct-web-sdk/blob/9d024825ce1fad8cb31e7878ad6b85ba6d6025b4/examples/vue-app/src/App.vue#L24).
 
 ## ✌️ License
 [**MIT**](./LICENSE)
