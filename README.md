@@ -34,7 +34,7 @@ Update your [`app.json`](./example/app.json) to include your application's [**sc
 #### 🔗 Configuring Deep Linking for iOS
 Firstly, you'll need to register your app's deep link scheme (i.e. `myapp`) as a supported [**URL Type**](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) with a role of **Viewer** in your App's `Info.plist`.
 
-Finally, append the following lines in the iOS [`AppDelegate.m`](./example/ios/AppDelegate.m):
+Finally, append the following lines in the iOS [`AppDelegate.m`](https://github.com/cawfree/express-torus-react-native/blob/master/example/ios/expresstorusreactnative/AppDelegate.m):
 
 ```diff
 + - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
