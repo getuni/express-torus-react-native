@@ -1,9 +1,13 @@
 import {useState, useEffect} from "react";
 import jsrsasign from "jsrsasign";
+import {typeCheck} from "type-check";
 
 import useSecureStorage from "./useSecureStorage";
 
 const useKeyPair = (id) => {
+  if (!typeCheck("String", id) || id.length <= 0) {
+    throw new Error(`Expected non-empty String id, encountered ${id}.`);
+  }
   const secureStorage = useSecureStorage();
   const [keyPair, setKeyPair] = useState(null);
   useEffect(
