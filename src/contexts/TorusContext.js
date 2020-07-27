@@ -6,6 +6,7 @@ const defaultContext = Object.freeze({
   loading: false,
   error: null,
   result: null,
+  login: () => Promise.reject(new Error(`You must wrap your application within a <Torus /> provider.`)),
 });
 
 const TorusContext = React.createContext(defaultContext);
