@@ -1,9 +1,7 @@
 # express-torus-react-native
 🔐 ⚛️  A React Native hook for simple decentralized key management using [Tor.us](https://tor.us/), which serves as a combined social login and ethereum wallet!
 
-This is a companion library for [`express-torus`](https://github.com/cawfree/express-torus).
-
-This project works by navigating from your application to the interface hosted by your specified `providerUri`, i.e. where your instance of [`express-torus`](https://github.com/cawfree/express-torus) is being served. Upon successful auth, your app will returned to via [**Deep Linking**](https://reactnavigation.org/docs/deep-linking) and securely provide the authentication result. This includes standard authentication data (such as username and profile photo) in addition to [**Ethereum**](https://ethereum.org/en/) wallet credentials that can be used in transactions.
+This project works by navigating from your application to the interface hosted by your specified `providerUri`, i.e. where your instance of [`express-torus`](https://github.com/cawfree/express-torus) is being served. Upon successful auth with one of the many [**supported authentication providers**](https://github.com/torusresearch/torus-direct-web-sdk/blob/9d024825ce1fad8cb31e7878ad6b85ba6d6025b4/examples/vue-app/src/App.vue#L24), your app will returned to using [**Deep Linking**](https://reactnavigation.org/docs/deep-linking) wich the authentication result, which is accessed via a [**hook**](https://reactjs.org/docs/hooks-intro.html). This includes standard authentication data (such as username and profile photo) in addition to [**Ethereum**](https://ethereum.org/en/) wallet credentials that can be used in transactions.
 
 ## 🚀 Getting Started
 
@@ -19,7 +17,9 @@ Using [`yarn`](https://yarnpkg.com):
 yarn add express-torus-react-native
 ```
 
-#### Enable Deep Linking on Expo
+### Deep Linking
+
+#### Configuring Deep Linking on Expo
 Update your [`app.json`](./example/app.json) to include your application's [**scheme**](https://docs.expo.io/workflow/linking/#in-a-standalone-app) to match the configuration consumed by the backend's [`linking`](https://github.com/cawfree/express-torus/blob/c92f831891c0d88dc4dd36b310bcfa75ae33032d/example/src/index.js#L87) prop:
 
 ```diff
@@ -30,7 +30,7 @@ Update your [`app.json`](./example/app.json) to include your application's [**sc
 }
 ```
 
-#### Enable Deep Linking iOS
+#### Configuring Deep Linking iOS
 Firstly, you'll need to register your app's deep link scheme (i.e. `myapp`) as a supported [**URL Type**](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) with a role of **Viewer** in your App's `Info.plist`.
 
 Finally, append the following lines in the iOS [`AppDelegate.m`](./example/ios/AppDelegate.m):
@@ -43,6 +43,7 @@ Finally, append the following lines in the iOS [`AppDelegate.m`](./example/ios/A
 +   return NO;
 + }
 ```
+
 ## ✍️ Usage
 
 ```javascript
