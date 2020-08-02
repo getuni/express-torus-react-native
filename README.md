@@ -51,7 +51,7 @@ Finally, append the following lines in the iOS [`AppDelegate.m`](https://github.
 
 ```javascript
 import React from "react";
-import {SafeAreaView, TouchableOpacity, ActivityIndicator, Text} from "react-native";
+import {Platform, SafeAreaView, TouchableOpacity, ActivityIndicator, Text} from "react-native";
 
 import Torus, {useTorus} from "express-torus-react-native";
 
@@ -71,7 +71,7 @@ const SimpleTorusLogin = ({...extraProps}) => {
     );
   }
   return (
-    <TouchableOpacity onPress={login}>
+    <TouchableOpacity onPress={() => login(Platform.OS === "web" ? "http://localhost:19006" : "myapp://")}>
       <Text children="Login" />
     </TouchableOpacity>
   );

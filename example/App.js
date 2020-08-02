@@ -1,5 +1,5 @@
 import React from "react";
-import {SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet, Text} from "react-native";
+import {Platform, SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet, Text} from "react-native";
 
 import Torus, {useTorus} from "express-torus-react-native";
 
@@ -30,7 +30,7 @@ const SimpleTorusLogin = ({...extraProps}) => {
   }
   return (
     <TouchableOpacity
-      onPress={login}
+      onPress={() => login(Platform.OS === "web" ? "http://localhost:19006" : "myapp://")}
     >
       <Text
         children="Login"

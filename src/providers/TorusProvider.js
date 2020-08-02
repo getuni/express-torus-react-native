@@ -65,10 +65,12 @@ const TorusProvider = ({providerUri, children, ...extras}) => {
   );
 
   const login = useCallback(
-    () => {
-      if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
+    (deepLinkUri) => {
+      if (!typeCheck("String", deepLinkUri)) {
+        throw new Error(`Expected String deepLinkUri, encountered ${deepLinkUri}.`);
+      } else if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
         const {crtPub} = keyPair;
-        const uri = `${providerUri}/torus?platform=${Platform.OS}&public=${btoa(crtPub)}`;
+        const uri = `${providerUri}/torus?deepLinkUri=${btoa(deepLinkUri)}&public=${btoa(crtPub)}`;
         if (Platform.OS === "web") {
           return Linking.openURL(uri);
         }
