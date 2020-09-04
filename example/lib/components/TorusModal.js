@@ -17,6 +17,9 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
           if (type === "torus-auth") {
             const { data } = extras;
             return onAuthResult(data);
+          } else if (type === "torus-verifier-result") {
+            const { result } = extras;
+            return console.warn('got verifier', result);
           }
           throw new Error(`Unexpected type, ${type}.`);
         }
