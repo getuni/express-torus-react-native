@@ -7,8 +7,8 @@ import parse from "url-parse";
 import {useImmer} from "use-immer";
 import {encode as btoa} from "base-64";
 import {typeCheck} from "type-check";
-import * as WebBrowser from "expo-web-browser";
 
+import {TorusModal} from "../components";
 import {TorusContext} from "../contexts";
 import {useKeyPair} from "../hooks";
 
@@ -16,83 +16,34 @@ const KEYPAIR_v0 = "JrSEqgr2sDCwZXC9YASO4";
 
 const shouldDecryptSensitiveData = (data, key) => {
   const { privateKey, ...extras } = data;
-  return {
-    ...extras,
-    privateKey: jsrsasign.crypto.Cipher.decrypt(privateKey, key),
-  };
+  return { ...extras, privateKey: jsrsasign.crypto.Cipher.decrypt(privateKey, key) };
 };
 
 const TorusProvider = ({providerUri, children, ...extras}) => {
-  const [state, updateState] = useImmer({error: null, result: null});
+  const [state, updateState] = useImmer({uri: null, error: null, result: null});
+  const [uri, setUri] = useState(null);
   const keyPair = useKeyPair(KEYPAIR_v0);
-  const maybeFetchTorus = useCallback(
-    url => Promise
-      .resolve()
-      .then(
-        () => {
-          if (url && !!keyPair) {
-            const {crtPrv} = keyPair;
-            return Promise
-              .resolve()
-              .then(() => parse(url))
-              .then(({query}) => params(query))
-              .then(({torus}) => {
-                if (!!torus) {
-                  /* close prompt */
-                  if (Platform.OS === "ios") {
-                    WebBrowser.dismissBrowser();
-                  }
-                  return Promise
-                    .resolve()
-                    .then(() => JSON.parse(decodeURIComponent(torus)))
-                    .then(encryptedData => shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv)))
-                    .then(
-                      result =>  updateState(
-                        () => ({
-                          error: null,
-                          result,
-                        }),
-                      ),
-                    );
-                }
-              });
-          }
-          return undefined;
-        },
-      )
-      .catch(error => updateState(() => ({ data: null, error }))),
-    [updateState, keyPair],
-  );
-
+  
   const login = useCallback(
-    (deepLinkUri) => {
-      if (!typeCheck("String", deepLinkUri)) {
-        throw new Error(`Expected String deepLinkUri, encountered ${deepLinkUri}.`);
+    (arg) => {
+      if (!!arg) {
+        throw new Error(`Tor.us 😔: The deepLinkUri prop is now deprecated. Please replace your call to login(any) with login().`);
       } else if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
         const {crtPub} = keyPair;
-        const uri = `${providerUri}/torus?deepLinkUri=${btoa(deepLinkUri)}&public=${btoa(crtPub)}`;
-        if (Platform.OS === "web") {
-          return Linking.openURL(uri);
-        }
-        return WebBrowser.openBrowserAsync(uri);
+        return setUri(`${providerUri}/torus?public=${btoa(crtPub)}`);
       }
     },
-    [providerUri, keyPair],
+    [providerUri, keyPair, setUri],
   );
 
-  useEffect(
-    () => {
-      /* initial url */
-      Linking.getInitialURL()
-        .then(url => maybeFetchTorus(url));
-
-      const e = ({url}) => maybeFetchTorus(url);
-      /* mid-session url */
-      Linking.addEventListener("url", e);
-
-      return () => Linking.removeEventListener("url", e);
+  const onAuthResult = useCallback(
+    async (encryptedData) => {
+      const {crtPrv} = keyPair;
+      const result = await shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv));
+      updateState(() => ({ error: null, result }));
+      return setUri(null);
     },
-    [maybeFetchTorus],
+    [updateState, setUri, keyPair],
   );
 
   return (
@@ -106,6 +57,12 @@ const TorusProvider = ({providerUri, children, ...extras}) => {
       }}
     >
       {children}
+      <TorusModal
+        onAuthResult={onAuthResult}
+        visible={!!uri}
+        source={{ uri }}
+        onDismiss={() => setUri()}
+      />
     </TorusContext.Provider>
   );
 };

@@ -29,12 +29,8 @@ const SimpleTorusLogin = ({...extraProps}) => {
     );
   }
   return (
-    <TouchableOpacity
-      onPress={() => login(Platform.OS === "web" ? "http://localhost:19006" : "myapp://")}
-    >
-      <Text
-        children="Login"
-      />
+    <TouchableOpacity onPress={() => login()}>
+      <Text children="Login" />
     </TouchableOpacity>
   );
 };
