@@ -21,29 +21,30 @@ const shouldDecryptSensitiveData = (data, key) => {
 
 const TorusProvider = ({providerUri, children, ...extras}) => {
   const [state, updateState] = useImmer({uri: null, error: null, result: null});
-  const [uri, setUri] = useState(null);
+  const [visible, setVisible] = useState(false);
+
   const keyPair = useKeyPair(KEYPAIR_v0);
+  const {crtPub, crtPrv} = keyPair || {};
+
+  const uri = `${providerUri}/torus?public=${btoa(crtPub)}`;
   
   const login = useCallback(
     (arg) => {
       if (!!arg) {
         throw new Error(`Tor.us 😔: The deepLinkUri prop is now deprecated. Please replace your call to login(any) with login().`);
-      } else if (typeCheck("String", providerUri) && typeCheck("{crtPub:String,crtPrv:String}", keyPair)) {
-        const {crtPub} = keyPair;
-        return setUri(`${providerUri}/torus?public=${btoa(crtPub)}`);
       }
+      return setVisible(true);
     },
-    [providerUri, keyPair, setUri],
+    [setVisible],
   );
 
   const onAuthResult = useCallback(
     async (encryptedData) => {
-      const {crtPrv} = keyPair;
       const result = await shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv));
       updateState(() => ({ error: null, result }));
-      return setUri(null);
+      return setVisible(false);
     },
-    [updateState, setUri, keyPair],
+    [updateState, setVisible, crtPrv],
   );
 
   return (
@@ -59,9 +60,9 @@ const TorusProvider = ({providerUri, children, ...extras}) => {
       {children}
       <TorusModal
         onAuthResult={onAuthResult}
-        visible={!!uri}
+        visible={visible}
         source={{ uri }}
-        onDismiss={() => setUri()}
+        onDismiss={() => setVisible(false)}
       />
     </TorusContext.Provider>
   );
