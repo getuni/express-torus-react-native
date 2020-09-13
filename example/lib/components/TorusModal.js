@@ -15,7 +15,7 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
 
   const onMessage = useCallback(
     ({ nativeEvent: { data } }) => {
-      console.warn(data);
+      // console.warn(data);
       try {
         const e = JSON.parse(data);
         if (typeCheck("{type:String,...}", e)) {
@@ -29,9 +29,6 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
           } else if (type === "torus-trigger-auth") {
             const { trigger } = extras;
             return setTrigger(trigger);
-          //} else if (type === "torus-recovered") { // TODO: This should be torus-auth!
-          //  const { result } = extras;
-          //  return onAuthResult(result, false);
           }
           throw new Error(`Unexpected type, ${type}.`);
         }
@@ -39,6 +36,7 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
     },
     [onAuthResult, setVerify, ref, setTrigger],
   );
+
   useEffect(
     () => {
       if (!!trigger && !!verify) {
@@ -51,9 +49,11 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
     },
     [trigger, verify, ref, setVerify, setTrigger, setData, setKey],
   );
+
   const onLoadEnd = useCallback(
     () => {
       if (!!data) {
+        setData(null);
         ref.current.injectJavaScript(
           `
 setTimeout(
@@ -65,19 +65,23 @@ true;
         );
       }
     },
-    [data, ref],
+    [data, setData, ref],
   );
+  const { uri } = source;
   return (
     <ModalBox style={StyleSheet.absoluteFill} isOpen={visible} onClosed={onDismiss}>
-      <WebView
-        key={key}
-        ref={ref}
-        style={StyleSheet.absoluteFill}
-        onLoadEnd={onLoadEnd}
-        source={source}
-        onMessage={onMessage}
-        userAgent="Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"
-      />
+      {/* TODO: Find a way to preload the View. */}
+      {(!!uri) && (
+        <WebView
+          key={key}
+          ref={ref}
+          style={StyleSheet.absoluteFill}
+          onLoadEnd={onLoadEnd}
+          source={source}
+          onMessage={onMessage}
+          userAgent="Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"
+        />
+      )}
     </ModalBox>
   );
 }
