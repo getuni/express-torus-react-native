@@ -15,7 +15,6 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
 
   const onMessage = useCallback(
     ({ nativeEvent: { data } }) => {
-      // console.warn(data);
       try {
         const e = JSON.parse(data);
         if (typeCheck("{type:String,...}", e)) {
@@ -58,7 +57,7 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
           `
 setTimeout(
   () => window.__REACT_TORUS_TRIGGER_VERIFY__(${JSON.stringify(data)}),
-  2000, // TODO: This needs to be dynamic.
+  1000, // TODO: This needs to be dynamic.
 );
 true;
           `.trim(),
@@ -71,17 +70,15 @@ true;
   return (
     <ModalBox style={StyleSheet.absoluteFill} isOpen={visible} onClosed={onDismiss}>
       {/* TODO: Find a way to preload the View. */}
-      {(!!uri) && (
-        <WebView
-          key={key}
-          ref={ref}
-          style={StyleSheet.absoluteFill}
-          onLoadEnd={onLoadEnd}
-          source={source}
-          onMessage={onMessage}
-          userAgent="Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"
-        />
-      )}
+      <WebView
+        key={key}
+        ref={ref}
+        style={StyleSheet.absoluteFill}
+        onLoadEnd={onLoadEnd}
+        source={source}
+        onMessage={onMessage}
+        userAgent="Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"
+      />
     </ModalBox>
   );
 }
