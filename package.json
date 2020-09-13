@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "yarn ; babel src --out-dir dist ; rm -rf node_modules",
+    "build": "rm -rf dist ; yarn ; babel src --out-dir dist ; rm -rf node_modules",
     "prettify": "yarn prettier --write \"**/*.js\"",
     "test": "jest"
   },
