@@ -58,7 +58,12 @@ const SimpleTorusLogin = ({...extraProps}) => {
 
 export default function App() {
   return (
-    <Torus providerUri="http://localhost:3000">
+    <Torus
+      providerUri="http://localhost:3000"
+      renderLoading={() => (
+        <View style={{ flex: 1, backgroundColor: "green: }} />
+      )}
+    >
       <SafeAreaView>
         <SimpleTorusLogin />
       </SafeAreaView>

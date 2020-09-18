@@ -4,7 +4,7 @@ import {Platform, SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet,
 import Torus, {useTorus} from "express-torus-react-native";
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: "lightgrey"},
+  container: { flex: 1, backgroundColor: "lightgrey" },
   error: { color: "red" },
 });
 

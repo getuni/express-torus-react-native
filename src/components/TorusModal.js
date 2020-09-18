@@ -1,17 +1,19 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import ModalBox from "react-native-modalbox";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { typeCheck } from "type-check";
+import { WebViewModal, WebView } from "react-native-webview-modal";
 
-import { WebView } from ".";
+const styles = StyleSheet.create({
+  transparent: { backgroundColor: "transparent" },
+  hidden: { width: 0, height: 0, opacity: 0 },
+});
 
 function TorusModal({ visible, source, onDismiss, onAuthResult }) {
-  const ref = useRef();
   const [verify, setVerify] = useState(null);
   const [trigger, setTrigger] = useState(null);
-  const [data, setData] = useState(null);
-  const [key, setKey] = useState(Math.random);
+  const ref = useRef();
 
   const onMessage = useCallback(
     ({ nativeEvent: { data } }) => {
@@ -33,7 +35,7 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
         }
       } catch (e) {}
     },
-    [onAuthResult, setVerify, ref, setTrigger],
+    [onAuthResult, setVerify, setTrigger],
   );
 
   useEffect(
@@ -42,44 +44,27 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
         const { ...data } = { ...trigger, ...verify };
         setVerify(null);
         setTrigger(null);
-        setData(data);
-        setKey(Math.random);
+        onDismiss();
+        ref.current.injectJavaScript(`window.__REACT_TORUS_TRIGGER_VERIFY__(${JSON.stringify(data)}); true;`);
       }
     },
-    [trigger, verify, ref, setVerify, setTrigger, setData, setKey],
+    [trigger, verify, setVerify, setTrigger, ref, onDismiss],
   );
 
-  const onLoadEnd = useCallback(
-    () => {
-      if (!!data) {
-        setData(null);
-        ref.current.injectJavaScript(
-          `
-setTimeout(
-  () => window.__REACT_TORUS_TRIGGER_VERIFY__(${JSON.stringify(data)}),
-  1000, // TODO: This needs to be dynamic.
-);
-true;
-          `.trim(),
-        );
-      }
-    },
-    [data, setData, ref],
-  );
   const { uri } = source;
   return (
-    <ModalBox style={StyleSheet.absoluteFill} isOpen={visible} onClosed={onDismiss}>
-      {/* TODO: Find a way to preload the View. */}
-      <WebView
-        key={key}
-        ref={ref}
-        style={StyleSheet.absoluteFill}
-        onLoadEnd={onLoadEnd}
+    <>
+      <View pointerEvents="none" style={styles.hidden}>
+        <WebView ref={ref} onMessage={onMessage} source={source} />
+      </View>
+      <WebViewModal
+        visible={visible}
+        style={[StyleSheet.absoluteFill, styles.transparent]}
         source={source}
         onMessage={onMessage}
         userAgent="Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"
       />
-    </ModalBox>
+    </>
   );
 }
 

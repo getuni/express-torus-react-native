@@ -3631,7 +3631,7 @@ expo@~38.0.9:
     uuid "^3.4.0"
 
 express-torus-react-native@../:
-  version "0.0.2-alpha.1"
+  version "0.1.0-alpha.0"
   dependencies:
     base-64 "^0.1.0"
     immer "^7.0.5"
@@ -3639,6 +3639,7 @@ express-torus-react-native@../:
     query-string "^6.13.1"
     react-native-modalbox "^2.0.0"
     react-native-web-webview "1.0.1"
+    react-native-webview-modal "^0.0.1-alpha.4"
     secure-ls "^1.2.6"
     url-parse "^1.4.7"
     use-immer "^0.4.1"
@@ -5802,6 +5803,11 @@ minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
+mitt@*:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-2.1.0.tgz#f740577c23176c6205b121b2973514eade1b2230"
+  integrity sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg==
+
 mixin-deep@^1.2.0:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.2.tgz#1120b43dc359a785dce65b55b82e257ccf479566"
@@ -6445,7 +6451,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@15.7.2, prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@*, prop-types@15.7.2, prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6555,6 +6561,15 @@ react-native-modalbox@^2.0.0:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-portal@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-portal/-/react-native-portal-1.3.0.tgz#ab4de75b3c82f133e776e793683c0e675104100c"
+  integrity sha512-Fvv4pc/lpddmYrpwgILrdWbnZLORdCnacpJbmeOqGon6ZNyK/YOKQ1GaSCBGmqM5uGtMt8WUlgvBedVr23ItLw==
+  dependencies:
+    mitt "*"
+    prop-types "*"
+    react "*"
+
 react-native-reanimated@~1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.9.0.tgz#38676c99dd585504fdc7331efb45e5f48ec7339a"
@@ -6597,6 +6612,11 @@ react-native-unimodules@~0.10.1:
     unimodules-sensors-interface "~5.2.1"
     unimodules-task-manager-interface "~5.2.1"
 
+react-native-use-dimensions@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-use-dimensions/-/react-native-use-dimensions-1.3.4.tgz#c9f818f86af1b4e69ef056b193a76eef4d55cdc8"
+  integrity sha512-wpfoODwERkkfYh/FQoF0Wmihn7AJuFa0Q2aqm5QCm1vhCUyJUSvqnh8/1pZ5Ar/L7Tu3GJ4LIfRgZrBj5rGQ6w==
+
 react-native-web-webview@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-web-webview/-/react-native-web-webview-1.0.1.tgz#af7f479194b7ce9c6ad3ad872a994d927418c4f7"
@@ -6620,10 +6640,28 @@ react-native-web@~0.11.7:
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.4"
 
-react-native-webview@^10.8.3:
-  version "10.8.3"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-10.8.3.tgz#63245fdf39320dbbc67c26e1e305342a51f93d66"
-  integrity sha512-QV3dCGG8xsr/65Rpf2/Khno8fzkyyJKUZpn00y6Wd1hbYRqataZOesCm2ceZS21yXzLLGVHmQlB5/41h3K787Q==
+react-native-webview-modal@^0.0.1-alpha.4:
+  version "0.0.1-alpha.4"
+  resolved "https://registry.yarnpkg.com/react-native-webview-modal/-/react-native-webview-modal-0.0.1-alpha.4.tgz#00ee553a704166ec4263c10209973da0412c40fa"
+  integrity sha512-YddBdLythubVa/NDFbtIcnccQ7tf0SEVaoMarPtbY0Jea9zNMYb+nT6loj4GC14lIaeWSnoMpCzXqk20QH7OJw==
+  dependencies:
+    react-native-portal "^1.3.0"
+    react-native-use-dimensions "^1.3.4"
+    react-native-web-webview "1.0.1"
+
+react-native-webview-modal@^0.0.1-alpha.6:
+  version "0.0.1-alpha.6"
+  resolved "https://registry.yarnpkg.com/react-native-webview-modal/-/react-native-webview-modal-0.0.1-alpha.6.tgz#b6b7b0573806ef94113d105e04bdaf3ff58280a1"
+  integrity sha512-Qe5KDpy8tdl3cqUs5+5Id8iCA0tKUsV5JfYaJzPNRQFf1NodKYfKEd7mpWG4UfiGRRwcBFi+B0zIAbJi7Xst8g==
+  dependencies:
+    react-native-portal "^1.3.0"
+    react-native-use-dimensions "^1.3.4"
+    react-native-web-webview "1.0.1"
+
+react-native-webview@^10.9.0:
+  version "10.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-10.9.0.tgz#a45998f82ab1bbbbfde22b8b155394772610157a"
+  integrity sha512-zYZfmdJca/xRbwvvOfPhzL59SQC4L0W9rPWVF4zMi7BMDdCVHXVp0wKZ9KzmqxZNwadZNTxl5s0pvd6p3S34Fg==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
@@ -6684,6 +6722,15 @@ react-timer-mixin@^0.13.4:
   version "0.13.4"
   resolved "https://registry.yarnpkg.com/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz#75a00c3c94c13abe29b43d63b4c65a88fc8264d3"
   integrity sha512-4+ow23tp/Tv7hBM5Az5/Be/eKKF7DIvJ09voz5LyHGQaqqz9WV8YMs31eFvcYQs7d451LSg7kDJV70XYN/Ug/Q==
+
+react@*:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
+  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
 
 react@~16.11.0:
   version "16.11.0"
