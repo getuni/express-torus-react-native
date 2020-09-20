@@ -47,6 +47,10 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
 
   const onAuthResult = useCallback(
     async (encryptedData) => {
+      if (encryptedData === null) {
+        updateState(() => ({ error: new Error("User cancelled auth."), result: null, loading: false }));
+        return setVisible(false);
+      }
       const result = await shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv));
       updateState(() => ({ error: null, result, loading: false }));
       return setVisible(false);

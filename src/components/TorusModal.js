@@ -30,6 +30,8 @@ function TorusModal({ visible, source, onDismiss, onAuthResult }) {
           } else if (type === "torus-trigger-auth") {
             const { trigger } = extras;
             return setTrigger(trigger);
+          } else if (type === "torus-auth-cancel") {
+            return onAuthResult(null);
           }
           throw new Error(`Unexpected type, ${type}.`);
         }
