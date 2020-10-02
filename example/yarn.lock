@@ -3631,10 +3631,9 @@ expo@~38.0.9:
     uuid "^3.4.0"
 
 express-torus-react-native@../:
-  version "0.1.0-alpha.5"
+  version "0.2.0-alpha.1"
   dependencies:
     base-64 "^0.1.0"
-    immer "^7.0.5"
     jsrsasign "^8.0.20"
     query-string "^6.13.1"
     react-native-modalbox "^2.0.0"
@@ -3642,7 +3641,6 @@ express-torus-react-native@../:
     react-native-webview-modal "^0.0.1-alpha.7"
     secure-ls "^1.2.6"
     url-parse "^1.4.7"
-    use-immer "^0.4.1"
 
 extend-shallow@^1.1.2:
   version "1.1.4"
@@ -4225,11 +4223,6 @@ immediate@^3.2.2:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.3.0.tgz#1aef225517836bcdf7f2a2de2600c79ff0269266"
   integrity sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==
-
-immer@^7.0.5:
-  version "7.0.9"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-7.0.9.tgz#28e7552c21d39dd76feccd2b800b7bc86ee4a62e"
-  integrity sha512-Vs/gxoM4DqNAYR7pugIxi0Xc8XAun/uy7AQu4fLLqaTBHxjOP9pJ266Q9MWA/ly4z6rAFZbvViOtihxUZ7O28A==
 
 import-fresh@^2.0.0:
   version "2.0.0"
@@ -7941,11 +7934,6 @@ url-parse@^1.4.4, url-parse@^1.4.7:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
-
-use-immer@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/use-immer/-/use-immer-0.4.1.tgz#82a372e666496bfd49750673be78c17fcd375ca8"
-  integrity sha512-lXukZMx+sWwkWOLMyd5/5Obr6xTDFGSOJ85/nGQk/qhpWAohaFWrYJkT2+70seU/F6Dh7S41c9X6TWL9ljReGQ==
 
 use-subscription@^1.0.0:
   version "1.4.1"

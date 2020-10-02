@@ -32,14 +32,23 @@ const ConnectedAccounts = ({ ...extraProps }) => {
   );
 };
 const SimpleTorusLogin = ({...extraProps}) => {
-  const {loading, error, results, login} = useTorus();
+  const {loading, results, login} = useTorus();
   if (loading) {
     return (
       <ActivityIndicator />
     );
   }
   return (
-    <TouchableOpacity onPress={() => login()}>
+    <TouchableOpacity
+      onPress={async () => {
+        try {
+          const result = await login();
+          console.warn(result);
+        } catch (e) {
+          console.error(e);
+        }
+      }}
+    >
       <Text children="Login" />
     </TouchableOpacity>
   );

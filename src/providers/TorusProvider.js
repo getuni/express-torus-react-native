@@ -22,7 +22,6 @@ const shouldDecryptSensitiveData = (data, key) => {
 const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
   const [state, updateState] = useState({
     loading: null,
-    error: null,
     results: {},
     visible: false,
   });
@@ -44,47 +43,63 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
   );
   
   const login = useCallback(
-    (arg) => {
+    async (arg) => {
       if (!!arg) {
         throw new Error(`Tor.us 😔: The deepLinkUri prop is now deprecated. Please replace your call to login(any) with login().`);
       }
-      updateState(e => ({
-        ...e,
-        loading: true,
-        visible: true,
-      }));
+      return new Promise(
+        (resolve, reject) => updateState(e => ({
+          ...e,
+          loading: true,
+          visible: true,
+          resolve,
+          reject,
+        })),
+      );
     },
     [updateState],
   );
 
   const onAuthResult = useCallback(
     async (encryptedData) => {
+      const { resolve, reject } = state;
+      if (!resolve || !reject) {
+        return console.warn(`Encounted callback asynchrony.`);
+      }
       if (encryptedData === null) {
-        return updateState(({ results }) => ({
-          error: new Error("User cancelled auth."),
-          results,
-          loading: false,
-          visible: false,
-        }));
+        return [
+          updateState(({ results }) => ({
+            results,
+            loading: false,
+            visible: false,
+            resolve: null,
+            reject: null,
+          })),
+          reject(new Error("User cancelled auth.")),
+        ];
       }
       const result = await shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv));
       const { userInfo: { typeOfLogin } } = result;
-      updateState(({ results }) => ({
-        error: null,
-        results: {
-          ...results,
-          [typeOfLogin]: result,
-        },
-        loading: false,
-        visible: false,
-      }));
-      return togglePage();
+      return [
+        updateState(({ results }) => ({
+          results: {
+            ...results,
+            [typeOfLogin]: result,
+          },
+          loading: false,
+          visible: false,
+          resolve: null,
+          reject: null,
+        })),
+        togglePage(),
+        resolve(result),
+      ];
     },
-    [updateState, crtPrv, togglePage],
+    [updateState, state, crtPrv, togglePage],
   );
 
   const logout = useCallback(
-    () => updateState(
+    async () => updateState(
       ({ results, ...extras }) => ({
         ...extras,
         results: {},
@@ -96,24 +111,21 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
   const { loading, visible } = state;
 
   useEffect(
-    () => {
-      Animated.timing(
-        animOpacity,
-        {
-          toValue: loading ? 1 : 0,
-          duration: 120,
-          useNativeDriver: Platform.OS !== "web",
-        },
-      ).start();
-    },
+    () => Animated.timing(animOpacity, {
+      toValue: loading ? 1 : 0,
+      duration: 120,
+      useNativeDriver: Platform.OS !== "web",
+    }).start(),
     [loading, animOpacity],
   );
+
+  const { resolve, reject, ...stateWithoutCallbacks } = state;
 
   return (
     <TorusContext.Provider
       value={{
         ...TorusContext.defaultContext,
-        ...state,
+        ...stateWithoutCallbacks,
         providerUri,
         keyPair,
         login,

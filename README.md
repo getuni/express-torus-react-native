@@ -30,27 +30,56 @@ expo install express-torus-react-native react-native-webview
 
 ```javascript
 import React from "react";
-import {Platform, SafeAreaView, TouchableOpacity, ActivityIndicator, Text} from "react-native";
+import {Platform, SafeAreaView, TouchableOpacity, ActivityIndicator, StyleSheet, Text} from "react-native";
 
 import Torus, {useTorus} from "express-torus-react-native";
 
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "lightgrey" },
+  error: { color: "red" },
+});
+
+const ConnectedAccounts = ({ ...extraProps }) => {
+  const { results, isLoggedIn, logout } = useTorus();
+  return (
+    <>
+      {isLoggedIn && <Text children="Connected accounts:" />}
+      {Object.entries(results).map(
+        ([typeOfLogin, result], i) => (
+          <Text 
+            key={i}
+            children={typeOfLogin}
+          />
+        )
+      )}
+      {isLoggedIn && (
+        <TouchableOpacity
+          onPress={logout}
+        >
+          <Text children="Logout" />
+        </TouchableOpacity>
+      )}
+    </>
+  );
+};
 const SimpleTorusLogin = ({...extraProps}) => {
-  const {loading, error, result, login} = useTorus();
+  const {loading, results, login} = useTorus();
   if (loading) {
     return (
       <ActivityIndicator />
     );
-  } else if (error) {
-    return (
-      <Text style={styles.error} children={error.toString()} />
-    );
-  } else if (result) {
-    return (
-      <Text children={JSON.stringify(result)} />
-    );
   }
   return (
-    <TouchableOpacity onPress={() => login()}>
+    <TouchableOpacity
+      onPress={async () => {
+        try {
+          const result = await login();
+          console.warn(result);
+        } catch (e) {
+          console.error(e);
+        }
+      }}
+    >
       <Text children="Login" />
     </TouchableOpacity>
   );
@@ -58,14 +87,10 @@ const SimpleTorusLogin = ({...extraProps}) => {
 
 export default function App() {
   return (
-    <Torus
-      providerUri="http://localhost:3000"
-      renderLoading={() => (
-        <View style={{ flex: 1, backgroundColor: "green: }} />
-      )}
-    >
+    <Torus>
       <SafeAreaView>
         <SimpleTorusLogin />
+        <ConnectedAccounts />
       </SafeAreaView>
     </Torus>
   );

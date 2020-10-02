@@ -35,15 +35,13 @@
   },
   "dependencies": {
     "base-64": "^0.1.0",
-    "immer": "^7.0.5",
     "jsrsasign": "^8.0.20",
     "query-string": "^6.13.1",
     "react-native-modalbox": "^2.0.0",
     "react-native-web-webview": "1.0.1",
     "react-native-webview-modal": "^0.0.1-alpha.7",
     "secure-ls": "^1.2.6",
-    "url-parse": "^1.4.7",
-    "use-immer": "^0.4.1"
+    "url-parse": "^1.4.7"
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",
