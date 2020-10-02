@@ -5,8 +5,10 @@ const defaultContext = Object.freeze({
   keyPair: null,
   loading: false,
   error: null,
-  result: null,
+  results: null,
   login: () => Promise.reject(new Error(`You must wrap your application within a <Torus /> provider.`)),
+  logout: () => Promise.reject(new Error(`You must wrap your application within a <Torus /> provider.`)),
+  isLoggedIn: false,
 });
 
 const TorusContext = React.createContext(defaultContext);

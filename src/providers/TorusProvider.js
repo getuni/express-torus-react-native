@@ -24,7 +24,7 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
   const [state, updateState] = useImmer({
     loading: null,
     error: null,
-    result: null,
+    results: {},
   });
   const [animOpacity] = useState(() => new Animated.Value(0));
   const [visible, setVisible] = useState(false);
@@ -48,14 +48,32 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
   const onAuthResult = useCallback(
     async (encryptedData) => {
       if (encryptedData === null) {
-        updateState(() => ({ error: new Error("User cancelled auth."), result: null, loading: false }));
+        updateState(({ results }) => ({ error: new Error("User cancelled auth."), results, loading: false }));
         return setVisible(false);
       }
       const result = await shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv));
-      updateState(() => ({ error: null, result, loading: false }));
+      const { userInfo: { typeOfLogin } } = result;
+      updateState(({ results }) => ({
+        error: null,
+        results: {
+          ...results,
+          [typeOfLogin]: result,
+        },
+        loading: false,
+      }));
       return setVisible(false);
     },
     [updateState, setVisible, crtPrv],
+  );
+
+  const logout = useCallback(
+    () => updateState(
+      ({ results, ...extras }) => ({
+        ...extras,
+        results: {},
+      }),
+    ),
+    [updateState],
   );
 
   const { loading } = state;
@@ -82,6 +100,8 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
         providerUri,
         keyPair,
         login,
+        logout,
+        isLoggedIn: !!Object.keys(state.results).length,
       }}
     >
       <WebViewProvider>

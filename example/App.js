@@ -8,24 +8,34 @@ const styles = StyleSheet.create({
   error: { color: "red" },
 });
 
+const ConnectedAccounts = ({ ...extraProps }) => {
+  const { results, isLoggedIn, logout } = useTorus();
+  return (
+    <>
+      {isLoggedIn && <Text children="Connected accounts:" />}
+      {Object.entries(results).map(
+        ([typeOfLogin, result], i) => (
+          <Text 
+            key={i}
+            children={typeOfLogin}
+          />
+        )
+      )}
+      {isLoggedIn && (
+        <TouchableOpacity
+          onPress={logout}
+        >
+          <Text children="Logout" />
+        </TouchableOpacity>
+      )}
+    </>
+  );
+};
 const SimpleTorusLogin = ({...extraProps}) => {
-  const {loading, error, result, login} = useTorus();
+  const {loading, error, results, login} = useTorus();
   if (loading) {
     return (
       <ActivityIndicator />
-    );
-  } else if (error) {
-    return (
-      <Text
-        style={styles.error}
-        children={error.toString()}
-      />
-    );
-  } else if (result) {
-    return (
-      <Text
-        children={JSON.stringify(result)}
-      />
     );
   }
   return (
@@ -40,6 +50,7 @@ export default function App() {
     <Torus>
       <SafeAreaView>
         <SimpleTorusLogin />
+        <ConnectedAccounts />
       </SafeAreaView>
     </Torus>
   );
