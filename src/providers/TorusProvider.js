@@ -4,7 +4,6 @@ import {ActivityIndicator, View, StyleSheet, Animated, Platform} from "react-nat
 import {parse as params} from "query-string";
 import jsrsasign from "jsrsasign";
 import parse from "url-parse";
-import {useImmer} from "use-immer";
 import {encode as btoa} from "base-64";
 import {typeCheck} from "type-check";
 import WebViewProvider from "react-native-webview-modal";
@@ -21,35 +20,52 @@ const shouldDecryptSensitiveData = (data, key) => {
 };
 
 const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
-  const [state, updateState] = useImmer({
+  const [state, updateState] = useState({
     loading: null,
     error: null,
     results: {},
+    visible: false,
   });
   const [animOpacity] = useState(() => new Animated.Value(0));
-  const [visible, setVisible] = useState(false);
+  const [filter, setFilter] = useState(false);
 
   const keyPair = useKeyPair(KEYPAIR_v0);
   const {crtPub, crtPrv} = keyPair || {};
 
   const uri = `${providerUri}/torus?public=${btoa(crtPub)}`;
+
+  /* hack refresh */
+  const togglePage = useCallback(
+    () => Promise.resolve()
+      .then(() => setFilter(true))
+      .then(() => new Promise(resolve => setTimeout(resolve, 250)))
+      .then(() => setFilter(false)),
+    [setFilter],
+  );
   
   const login = useCallback(
     (arg) => {
       if (!!arg) {
         throw new Error(`Tor.us 😔: The deepLinkUri prop is now deprecated. Please replace your call to login(any) with login().`);
       }
-      updateState(draft => { draft.loading = true; });
-      return setVisible(true);
+      updateState(e => ({
+        ...e,
+        loading: true,
+        visible: true,
+      }));
     },
-    [setVisible, updateState],
+    [updateState],
   );
 
   const onAuthResult = useCallback(
     async (encryptedData) => {
       if (encryptedData === null) {
-        updateState(({ results }) => ({ error: new Error("User cancelled auth."), results, loading: false }));
-        return setVisible(false);
+        return updateState(({ results }) => ({
+          error: new Error("User cancelled auth."),
+          results,
+          loading: false,
+          visible: false,
+        }));
       }
       const result = await shouldDecryptSensitiveData(encryptedData, jsrsasign.KEYUTIL.getKey(crtPrv));
       const { userInfo: { typeOfLogin } } = result;
@@ -60,10 +76,11 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
           [typeOfLogin]: result,
         },
         loading: false,
+        visible: false,
       }));
-      return setVisible(false);
+      return togglePage();
     },
-    [updateState, setVisible, crtPrv],
+    [updateState, crtPrv, togglePage],
   );
 
   const logout = useCallback(
@@ -76,7 +93,7 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
     [updateState],
   );
 
-  const { loading } = state;
+  const { loading, visible } = state;
 
   useEffect(
     () => {
@@ -120,8 +137,11 @@ const TorusProvider = ({providerUri, children, renderLoading, ...extras}) => {
         <TorusModal
           onAuthResult={onAuthResult}
           visible={visible}
-          source={{ uri }}
-          onDismiss={() => setVisible(false)}
+          source={{ ...(filter ? { html: "" } : { uri }) }}
+          onDismiss={() => updateState(e => ({
+            ...e,
+            visible: false,
+          }))}
         />
       </WebViewProvider>
     </TorusContext.Provider>
